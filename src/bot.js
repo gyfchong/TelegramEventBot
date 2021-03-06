@@ -86,7 +86,7 @@ function shortenDescriptionIfTooLong(description) {
 }
 
 function removeBotCommand(text) {
-  return text.replace(/^\/(E|e)vent( |\n)?/, "");
+  return text.replace(/^\/(I|i)bento( |\n)?/, "");
 }
 
 function addEventAuthor(text, author) {
