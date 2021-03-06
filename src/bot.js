@@ -6,7 +6,7 @@ const { sanitize } = require("./util");
 
 const ACTIONS = {
   RSVP: "RSVP",
-  CANCEL_RSVP: "CANCEL_RSVP"
+  CANCEL_RSVP: "CANCEL_RSVP",
 };
 
 let db = new DB();
@@ -26,18 +26,18 @@ console.log("Bot server started in the " + process.env.NODE_ENV + " mode");
 const rsvpButtons = new InlineKeyboard();
 rsvpButtons.addRow({
   text: i18n.buttons.rsvp,
-  callback_data: ACTIONS.RSVP
+  callback_data: ACTIONS.RSVP,
 });
 rsvpButtons.addRow({
   text: i18n.buttons.cancel_rsvp,
-  callback_data: ACTIONS.CANCEL_RSVP
+  callback_data: ACTIONS.CANCEL_RSVP,
 });
 
-bot.onText(/^\/(E|e)vent.*/, msg => {
+bot.onText(/^\/(E|e)vent.*/, (msg) => {
   createEvent(msg);
 });
 
-bot.on("callback_query", query => {
+bot.on("callback_query", (query) => {
   if (query.data === ACTIONS.RSVP) {
     changeRSVPForUser(query.from, query.message, query.id, false);
   } else {
@@ -63,9 +63,9 @@ function createEvent(msg) {
   bot
     .sendMessage(msg.chat.id, sanitized_event_description_with_author, {
       parse_mode: "markdown",
-      ...rsvpButtons.build()
+      ...rsvpButtons.build(),
     })
-    .then(async created_msg => {
+    .then(async (created_msg) => {
       const event_id = createEventIDFromMessage(created_msg);
       await db.insertEvent(
         event_id,
@@ -90,9 +90,9 @@ function removeBotCommand(text) {
 }
 
 function addEventAuthor(text, author) {
-  return `${text}\n\n_${i18n.message_content.created_by} ${getFullNameString(
-    author
-  )}_`;
+  return `${getFullNameString(author)}_ ${
+    i18n.message_content.created_by
+  }_ ${text}`;
 }
 
 function deleteMessage(msg) {
@@ -122,8 +122,8 @@ async function changeRSVPForUser(user, msg, queryID, cancellingRSVP) {
   bot.answerCallbackQuery(queryID, { text: "" }).then(async () => {
     const attendees = await db
       .getAttendeesByEventID(event_id)
-      .then(res => res)
-      .catch(err =>
+      .then((res) => res)
+      .catch((err) =>
         console.error(
           `Error while getting attendees from database: event_id=${event_id}`
         )
@@ -136,7 +136,7 @@ async function changeRSVPForUser(user, msg, queryID, cancellingRSVP) {
       chat_id: msg.chat.id,
       message_id: msg.message_id,
       parse_mode: "markdown",
-      ...rsvpButtons.build()
+      ...rsvpButtons.build(),
     });
   });
 }
@@ -154,7 +154,7 @@ function getFullNameString(user) {
     return sanitize(user.username);
   }
   return [sanitize(user.first_name), sanitize(user.last_name)]
-    .filter(namePart => namePartIsPresent(namePart))
+    .filter((namePart) => namePartIsPresent(namePart))
     .join(" ");
 }
 

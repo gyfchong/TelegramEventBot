@@ -1,13 +1,13 @@
 module.exports = {
   message_content: {
-    created_by: "Erstellt von",
-    rsvps: "Zusagen"
+    created_by: "wa anata ni kite hoshī",
+    rsvps: "Sankasha",
   },
   buttons: {
-    rsvp: "👍    zusagen",
-    cancel_rsvp: "🚫  doch nicht"
+    rsvp: "👍 Mochiron! Watashi o tayori ni",
+    cancel_rsvp: "🚫 Ikanai, haisha",
   },
   errors: {
-    generic: "Ein Fehler ist aufgetreten."
-  }
+    generic: "Beep boop.",
+  },
 };
